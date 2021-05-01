@@ -1,7 +1,7 @@
 import './collection-item.styles.scss';
 
 const CollectionItem = (props) => {
-	const { id, name, price, imageUrl } = props;
+	const { name, price, imageUrl } = props;
 
 	return (
 		<div className="collection-item">
