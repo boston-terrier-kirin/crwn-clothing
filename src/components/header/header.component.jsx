@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import { auth } from '../../firebase/firebase.utils';
 import './header.styles.scss';
 import { ReactComponent as Logo } from '../../assets/crown.svg';
+import CartIcon from '../cart-icon/cart-icon.component';
+import CartDropdown from '../cart-dropdown/cart-dropdown.component';
 
 const Header = (props) => {
 	return (
@@ -26,7 +28,9 @@ const Header = (props) => {
 						SIGN IN
 					</Link>
 				)}
+				<CartIcon />
 			</div>
+			{!props.cartHidden && <CartDropdown />}
 		</div>
 	);
 };
@@ -35,6 +39,7 @@ const mapStateToProps = (state) => {
 	return {
 		// これでHeaderのprops.currentUserに、storeで管理しているcurrentUserが紐づく
 		currentUser: state.user.currentUser,
+		cartHidden: state.cart.hidden,
 	};
 };
 
