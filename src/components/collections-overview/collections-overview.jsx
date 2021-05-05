@@ -1,9 +1,11 @@
 import { connect } from 'react-redux';
-import { selectShopCollections } from '../../redux/shop/shop.selectors';
+import { selectCollectionForPreview } from '../../redux/shop/shop.selectors';
 import './collections-overview.styles.scss';
 import CollectionPreview from '../collection-preview/collection-preview.component';
 
 const CollectionsOverview = (props) => {
+	console.log('★CollectionsOverview');
+
 	const collectionList = props.collections.map((collection) => (
 		<CollectionPreview
 			key={collection.id}
@@ -14,11 +16,11 @@ const CollectionsOverview = (props) => {
 		/>
 	));
 
-	return <div classNMame="collections-overview">{collectionList}</div>;
+	return <div className="collections-overview">{collectionList}</div>;
 };
 
 const mapStateToProps = (state) => ({
-	collections: selectShopCollections(state),
+	collections: selectCollectionForPreview(state),
 });
 
 export default connect(mapStateToProps)(CollectionsOverview);
