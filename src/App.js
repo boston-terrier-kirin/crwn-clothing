@@ -1,7 +1,11 @@
 import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { auth, createUserProfileDocument } from './firebase/firebase.utils';
+import {
+	auth,
+	createUserProfileDocument,
+	addCollectionAndDocuments,
+} from './firebase/firebase.utils';
 
 import { setCurrentUser } from './redux/user/user.actions';
 import { selectCurrentUser } from './redux/user/user.selectors';
@@ -13,11 +17,13 @@ import ShopPage from './pages/shop/shop.component';
 import CheckoutPage from './pages/checkout/checkout.component';
 import './App.css';
 
+import { selectCollectionForPreview } from './redux/shop/shop.selectors';
+
 class App extends React.Component {
 	unsubscribeFromAuth = null;
 
 	componentDidMount() {
-		const { dispatch } = this.props;
+		const { dispatch, collectionsArray } = this.props;
 
 		this.unsubscribeFromAuth = auth.onAuthStateChanged(async (userAuth) => {
 			if (userAuth) {
@@ -29,6 +35,12 @@ class App extends React.Component {
 				});
 			}
 			dispatch(setCurrentUser(userAuth));
+
+			// Firebaseにデータを投入した時の残骸
+			addCollectionAndDocuments(
+				'collection',
+				collectionsArray.map(({ title, items }) => ({ title, items }))
+			);
 		});
 	}
 
@@ -68,6 +80,7 @@ const mapStateToProps = (state) => {
 	return {
 		// これでAppのprops.currentUserに、storeで管理しているcurrentUserが紐づく
 		currentUser: selectCurrentUser(state),
+		collectionsArray: selectCollectionForPreview(state),
 	};
 };
 export default connect(mapStateToProps)(App);
